@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Production Performance Analytics System | Portfolio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #0f172a;
+      --bg-card: #111827;
+      --fg: #e5e7eb;
+      --accent: #38bdf8;
+      --muted: #9ca3af;
+      --border: #1f2937;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #1e293b 0, #020617 55%);
+      color: var(--fg);
+      line-height: 1.6;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .page {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 32px 16px 64px;
+    }
+    header {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 32px;
+    }
+    header h1 { font-size: 2.4rem; margin: 0; }
+    header p { margin: 0; color: var(--muted); }
+    .tagline { font-size: 0.95rem; color: var(--muted); }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      padding: 4px 10px;
+      background: rgba(56, 189, 248, 0.08);
+      color: var(--accent);
+      font-size: 0.8rem;
+      border: 1px solid rgba(56, 189, 248, 0.4);
+    }
+    .pill-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--accent);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+    @media (max-width: 800px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+    .card {
+      background: radial-gradient(circle at top left, #1f2937 0, #020617 70%);
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      padding: 18px 20px;
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.45);
+    }
+    .card h2 { margin: 0 0 8px; font-size: 1.15rem; }
+    .card small { color: var(--muted); font-size: 0.8rem; }
+    .card ul { padding-left: 18px; margin: 8px 0; font-size: 0.92rem; }
+    .section { margin-top: 28px; }
+    .section h3 { font-size: 1.1rem; margin-bottom: 6px; }
+    .section p { font-size: 0.95rem; color: var(--fg); }
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 6px;
+    }
+    .chip {
+      border-radius: 999px;
+      padding: 4px 10px;
+      border: 1px solid var(--border);
+      font-size: 0.8rem;
+      color: var(--muted);
+      background: #020617;
+    }
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .metric {
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: #020617;
+      font-size: 0.86rem;
+    }
+    .metric-label {
+      color: var(--muted);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .metric-value {
+      font-size: 1rem;
+      margin-top: 2px;
+    }
+    .two-col {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin-top: 10px;
+    }
+    footer {
+      margin-top: 40px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(148, 163, 184, 0.2);
+      font-size: 0.85rem;
+      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: space-between;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="pill">
+        <span class="pill-dot"></span>
+        Manufacturing Analytics • Case Study
+      </div>
+      <h1>Production Performance Analytics System</h1>
+      <p class="tagline">End-to-end SQL Server → Power BI solution for manufacturing KPIs: On-Time Delivery, Margin, Variance, and OEE.</p>
+    </header>
+
+    <div class="grid">
+      <div class="card">
+        <h2>Project Summary</h2>
+        <small>What this solution does</small>
+        <p>
+          Designed and implemented a complete analytics workflow for a simulated engineered-wood manufacturer. Data is modeled in SQL Server,
+          consumed directly by Power BI, and visualized through dashboards that monitor service reliability, profitability,
+          production variance, and machine efficiency (OEE).
+        </p>
+        <ul>
+          <li>Relational data model in SQL Server (ERP-style tables)</li>
+          <li>Star schema data model in Power BI</li>
+          <li>DAX KPIs for OTD, margin, variance, yield, and OEE</li>
+          <li>Dashboards for leadership and operations teams</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>Tech Stack</h2>
+        <small>Core tools and concepts</small>
+        <div class="chips">
+          <span class="chip">SQL Server</span>
+          <span class="chip">T-SQL</span>
+          <span class="chip">Power BI</span>
+          <span class="chip">DAX</span>
+          <span class="chip">Star Schema</span>
+          <span class="chip">Manufacturing KPIs</span>
+          <span class="chip">OEE</span>
+        </div>
+        <div class="section">
+          <h3>Role</h3>
+          <p>End-to-end designer: data model, semantic model, KPIs, and dashboard design.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>Business Context</h3>
+      <p>
+        Manufacturing leaders need a single source of truth for service performance, margin, and shop-floor productivity.
+        ERP systems often provide raw data but lack integrated, decision-ready views. This project addresses that gap by
+        connecting SQL Server data directly to Power BI, modeling it properly, and defining KPIs that management actually cares about.
+      </p>
+    </div>
+
+    <div class="section">
+      <h3>Data Model Design</h3>
+      <div class="two-col">
+        <div>
+          <strong>SQL Server Entities</strong>
+          <ul>
+            <li><b>Customers</b> – regions, accounts, service analysis</li>
+            <li><b>Parts</b> – cost, standard hours, product hierarchy</li>
+            <li><b>Machines</b> – equipment for OEE monitoring</li>
+            <li><b>SalesOrders</b> – promise vs ship dates, quantity, pricing</li>
+            <li><b>JobOrders</b> – planned vs completed, scrap, downtime, hours</li>
+          </ul>
+        </div>
+        <div>
+          <strong>Power BI Star Schema</strong>
+          <ul>
+            <li>Fact tables: <b>SalesOrders</b>, <b>JobOrders</b></li>
+            <li>Dimensions: <b>Customers</b>, <b>Parts</b>, <b>Machines</b>, <b>Date</b></li>
+            <li>Relationships based on CustomerID, PartID, MachineID, SalesOrderID</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>Key KPIs & Metrics</h3>
+      <p>The following KPIs were implemented in DAX to drive the dashboards:</p>
+      <div class="metrics">
+        <div class="metric">
+          <div class="metric-label">Service</div>
+          <div class="metric-value">On-Time Delivery %</div>
+          <p>Shipments delivered on or before promise date, by customer and part.</p>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Profitability</div>
+          <div class="metric-value">Margin & Margin %</div>
+          <p>Revenue vs standard cost by product and customer.</p>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Production</div>
+          <div class="metric-value">Std vs Actual Hours</div>
+          <p>Variance analysis for jobs, parts, and machines.</p>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Quality & OEE</div>
+          <div class="metric-value">Yield & OEE</div>
+          <p>Availability, Performance, Quality metrics at machine level.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>Dashboards</h3>
+      <div class="two-col">
+        <div>
+          <strong>On-Time Delivery & Service</strong>
+          <ul>
+            <li>Overall OTD % KPI</li>
+            <li>OTD by customer and by part</li>
+            <li>Region and date filters</li>
+          </ul>
+        </div>
+        <div>
+          <strong>Sales & Margin</strong>
+          <ul>
+            <li>Revenue and margin cards</li>
+            <li>Margin by part and customer</li>
+            <li>Filters for region, date, and product</li>
+          </ul>
+        </div>
+      </div>
+      <div class="two-col" style="margin-top: 10px;">
+        <div>
+          <strong>Production & Variance</strong>
+          <ul>
+            <li>Std vs actual hours</li>
+            <li>Yield and scrap indicators</li>
+            <li>Trend over time</li>
+          </ul>
+        </div>
+        <div>
+          <strong>Machine OEE</strong>
+          <ul>
+            <li>Availability, Performance, Quality</li>
+            <li>OEE % per machine</li>
+            <li>Drill-down to parts and jobs</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>Outcome & Value</h3>
+      <p>
+        The final solution provides a consolidated analytics layer that can sit on top of an ERP system.
+        It replaces ad-hoc spreadsheets with governed metrics and dashboards, enabling better decisions about
+        delivery reliability, margin management, and shop-floor efficiency.
+      </p>
+    </div>
+
+    <footer>
+      <span>Designed & implemented by <strong>Marc Lomuntad</strong></span>
+      <span>Contact: <a href="mailto:marc.lomuntad24@gmail.com">marc.lomuntad24@gmail.com</a></span>
+    </footer>
+  </div>
+</body>
+</html>

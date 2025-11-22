@@ -119,6 +119,7 @@
       gap: 16px;
       margin-top: 10px;
     }
+
     .gallery {
       display: grid;
       grid-template-columns: 1fr;
@@ -131,6 +132,7 @@
       background: #020617;
       overflow: hidden;
       box-shadow: 0 18px 45px rgba(0,0,0,0.45);
+      cursor: zoom-in;
     }
     .shot img {
       width: 100%;
@@ -149,6 +151,53 @@
       font-size: 0.9rem;
       color: var(--muted);
     }
+
+    /* Lightbox */
+    .lightbox-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.88);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+    .lightbox-backdrop.open {
+      display: flex;
+    }
+    .lightbox-content {
+      max-width: 95vw;
+      max-height: 90vh;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: 0 25px 60px rgba(0,0,0,0.8);
+      background: #020617;
+    }
+    .lightbox-content img {
+      display: block;
+      max-width: 100%;
+      max-height: 100%;
+    }
+    .lightbox-caption {
+      padding: 8px 12px 10px;
+      font-size: 0.9rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+    }
+    .lightbox-close {
+      position: fixed;
+      top: 16px;
+      right: 20px;
+      font-size: 1.4rem;
+      color: #e5e7eb;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.8);
+      border: 1px solid rgba(148,163,184,0.4);
+    }
+
     footer {
       margin-top: 40px;
       padding-top: 16px;
@@ -254,7 +303,7 @@
         </div>
         <div class="metric">
           <div class="metric-label">Profitability</div>
-          <div class="metric-value">Margin & Margin %</div>
+          <div class="metric-value">Margin &amp; Margin %</div>
           <p>Revenue vs standard cost by product and customer.</p>
         </div>
         <div class="metric">
@@ -263,8 +312,8 @@
           <p>Variance analysis for jobs, parts, and machines.</p>
         </div>
         <div class="metric">
-          <div class="metric-label">Quality & OEE</div>
-          <div class="metric-value">Yield & OEE</div>
+          <div class="metric-label">Quality &amp; OEE</div>
+          <div class="metric-value">Yield &amp; OEE</div>
           <p>Availability, Performance, Quality metrics at machine level.</p>
         </div>
       </div>
@@ -273,11 +322,11 @@
     <div class="section">
       <h3>Dashboards & Screenshots</h3>
       <p>
-        Below are selected screenshots from the Power BI report.
+        Below are selected screenshots from the Power BI report. Click any image to enlarge it.
       </p>
       <div class="gallery">
 
-        <figure class="shot">
+        <figure class="shot" data-caption="KPI-driven view showing delivery reliability by customer and product line, with filters for region and time periods. Enables proactive identification of at-risk accounts.">
           <img src="img/otd_dashboard.png" alt="On-Time Delivery dashboard in Power BI showing OTD KPIs and charts." />
           <div class="shot-body">
             <div class="shot-title">On-Time Delivery Performance</div>
@@ -288,10 +337,10 @@
           </div>
         </figure>
 
-        <figure class="shot">
+        <figure class="shot" data-caption="Consolidated margin reporting using standard cost, revenue, and mix effects. Highlights product and customer profitability drivers for commercial and operational decision-making.">
           <img src="img/margin_dashboard.png" alt="Sales and margin analysis dashboard in Power BI." />
           <div class="shot-body">
-            <div class="shot-title">Sales & Margin Analysis</div>
+            <div class="shot-title">Sales &amp; Margin Analysis</div>
             <div class="shot-caption">
               Consolidated margin reporting using standard cost, revenue, and mix effects. Highlights product and customer profitability
               drivers for commercial and operational decision-making.
@@ -299,10 +348,10 @@
           </div>
         </figure>
 
-        <figure class="shot">
+        <figure class="shot" data-caption="Machine-level Availability, Performance, and Quality metrics with OEE % and the ability to drill into specific machines and time periods, supporting continuous improvement discussions on the shop floor.">
           <img src="img/oee_dashboard.png" alt="Machine OEE dashboard in Power BI showing availability, performance, quality, and OEE by machine." />
           <div class="shot-body">
-            <div class="shot-title">Machine Efficiency & OEE</div>
+            <div class="shot-title">Machine Efficiency &amp; OEE</div>
             <div class="shot-caption">
               Machine-level Availability, Performance, and Quality metrics with OEE % and the ability to drill into specific machines and
               time periods, supporting continuous improvement discussions on the shop floor.
@@ -314,7 +363,7 @@
     </div>
 
     <div class="section">
-      <h3>Outcome & Value</h3>
+      <h3>Outcome &amp; Value</h3>
       <p>
         The final solution provides a consolidated analytics layer that can sit on top of an ERP system.
         It replaces ad-hoc spreadsheets with governed metrics and dashboards, enabling better decisions about
@@ -327,5 +376,59 @@
       <span>Contact: <a href="mailto:marc.lomuntad24@gmail.com">marc.lomuntad24@gmail.com</a></span>
     </footer>
   </div>
+
+  <!-- Lightbox -->
+  <div id="lightbox" class="lightbox-backdrop">
+    <div class="lightbox-close" id="lightbox-close" aria-label="Close image">&times;</div>
+    <div class="lightbox-content">
+      <img id="lightbox-img" src="" alt="Enlarged dashboard screenshot" />
+      <div class="lightbox-caption" id="lightbox-caption"></div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const lightbox = document.getElementById('lightbox');
+      const lightboxImg = document.getElementById('lightbox-img');
+      const lightboxCaption = document.getElementById('lightbox-caption');
+      const closeBtn = document.getElementById('lightbox-close');
+
+      function openLightbox(src, caption) {
+        lightboxImg.src = src;
+        lightboxCaption.textContent = caption || '';
+        lightbox.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeLightbox() {
+        lightbox.classList.remove('open');
+        lightboxImg.src = '';
+        lightboxCaption.textContent = '';
+        document.body.style.overflow = '';
+      }
+
+      document.querySelectorAll('.shot img').forEach(function (img) {
+        img.addEventListener('click', function () {
+          const figure = img.closest('.shot');
+          const caption = figure.getAttribute('data-caption') || '';
+          openLightbox(img.getAttribute('src'), caption);
+        });
+      });
+
+      closeBtn.addEventListener('click', closeLightbox);
+
+      lightbox.addEventListener('click', function (e) {
+        if (e.target === lightbox) {
+          closeLightbox();
+        }
+      });
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && lightbox.classList.contains('open')) {
+          closeLightbox();
+        }
+      });
+    })();
+  </script>
 </body>
 </html>

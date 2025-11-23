@@ -370,6 +370,44 @@
         delivery reliability, margin management, and shop-floor efficiency.
       </p>
     </div>
+	
+	<div class="section">
+  <h3>Code & Logic</h3>
+  <p>
+    The full implementation is available in the GitHub repository, including the SQL Server data model and the DAX measures
+    that drive the Power BI dashboards. Below are selected excerpts; follow the links to view the complete scripts.
+  </p>
+
+  <h4>SQL Server Data Model (Excerpt)</h4>
+  <pre><code>
+CREATE TABLE Customers (
+    CustomerID      INT IDENTITY(1,1) PRIMARY KEY,
+    CustomerCode    VARCHAR(10) NOT NULL,
+    CustomerName    VARCHAR(100) NOT NULL,
+    Region          VARCHAR(50)  NULL
+);
+  </code></pre>
+  <p>
+    <a href="https://github.com/mrcswordfish/Production_Performance_Analytics_System/blob/main/SQL/create_tables.sql" target="_blank">
+      View full SQL data model on GitHub →
+    </a>
+  </p>
+
+  <h4>DAX Measures (Excerpt)</h4>
+  <pre><code>
+OnTime Delivery % =
+DIVIDE ( [OnTime Shipments], [Total Shipments] )
+
+OEE % =
+[Availability %] * [Performance %] * [Quality %]
+  </code></pre>
+  <p>
+    <a href="https://github.com/mrcswordfish/Production_Performance_Analytics_System/blob/main/PowerBI/DAX_Measures_Script.md" target="_blank">
+      View full DAX KPI library on GitHub →
+    </a>
+  </p>
+</div>
+
 
     <footer>
       <span>Designed &amp; implemented by <strong>Marc Lomuntad</strong></span>

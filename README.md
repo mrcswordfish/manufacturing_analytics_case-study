@@ -42,19 +42,6 @@ This project simulates a realistic ERP → Analytics stack:
    - Dashboard screenshots for OTD, Margin, Variance, and OEE views
 ```
 
----
-
-# 🔗 Portfolio Website  
-A dedicated case-study website is included (`/website/index.html`) featuring:
-
-- Project summary
-- Data model
-- KPIs
-- **Interactive Power BI screenshots**
-- Integration & Automation section (Epicor-style REST → SQL → Power BI)
-
----
-
 # 🧩 1. SQL Server Data Model
 
 ### Tables Created  

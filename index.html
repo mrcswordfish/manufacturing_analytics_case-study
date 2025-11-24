@@ -119,7 +119,6 @@
       gap: 16px;
       margin-top: 10px;
     }
-
     .gallery {
       display: grid;
       grid-template-columns: 1fr;
@@ -220,7 +219,7 @@
         Manufacturing Analytics • Case Study
       </div>
       <h1>Production Performance Analytics System</h1>
-      <p class="tagline">End-to-end SQL Server → Power BI solution for manufacturing KPIs: On-Time Delivery, Margin, Variance, and OEE.</p>
+      <p class="tagline">Epicor-style REST API → Python ETL → SQL Server → Power BI dashboards for manufacturing KPIs.</p>
     </header>
 
     <div class="grid">
@@ -228,15 +227,16 @@
         <h2>Project Summary</h2>
         <small>What this solution does</small>
         <p>
-          Designed and implemented a complete analytics workflow for a simulated engineered-wood manufacturer. Data is modeled in SQL Server,
-          consumed directly by Power BI, and visualized through dashboards that monitor service reliability, profitability,
+          Designed and implemented a complete analytics workflow for a simulated engineered-wood manufacturer.
+          Data is modeled in SQL Server, refreshed via a Python integration job that follows an Epicor Kinetic–style REST pattern,
+          and visualized in Power BI through dashboards that monitor service reliability, profitability,
           production variance, and machine efficiency (OEE).
         </p>
         <ul>
           <li>Relational data model in SQL Server (ERP-style tables)</li>
           <li>Star schema data model in Power BI</li>
           <li>DAX KPIs for OTD, margin, variance, yield, and OEE</li>
-          <li>Dashboards for leadership and operations teams</li>
+          <li>Epicor-inspired REST → Python → SQL integration pipeline</li>
         </ul>
       </div>
 
@@ -244,6 +244,8 @@
         <h2>Tech Stack</h2>
         <small>Core tools and concepts</small>
         <div class="chips">
+          <span class="chip">Epicor-style REST</span>
+          <span class="chip">Python</span>
           <span class="chip">SQL Server</span>
           <span class="chip">T-SQL</span>
           <span class="chip">Power BI</span>
@@ -254,7 +256,7 @@
         </div>
         <div class="section">
           <h3>Role</h3>
-          <p>End-to-end designer: data model, semantic model, KPIs, and dashboard design.</p>
+          <p>End-to-end designer: API integration, data model, semantic model, KPIs, and dashboard design.</p>
         </div>
       </div>
     </div>
@@ -263,8 +265,9 @@
       <h3>Business Context</h3>
       <p>
         Manufacturing leaders need a single source of truth for service performance, margin, and shop-floor productivity.
-        ERP systems often provide raw data but lack integrated, decision-ready views. This project addresses that gap by
-        connecting SQL Server data directly to Power BI, modeling it properly, and defining KPIs that management actually cares about.
+        ERP systems (e.g., Epicor, IFS) provide rich data but often lack integrated, decision-ready views.
+        This project addresses that gap by connecting an Epicor-style REST API to SQL Server via Python, modeling the data properly,
+        and defining KPIs that management actually cares about.
       </p>
     </div>
 
@@ -287,36 +290,24 @@
             <li>Fact tables: <b>SalesOrders</b>, <b>JobOrders</b></li>
             <li>Dimensions: <b>Customers</b>, <b>Parts</b>, <b>Machines</b>, <b>Date</b></li>
             <li>Relationships based on CustomerID, PartID, MachineID, SalesOrderID</li>
+            <li>Active date on OrderDate, inactive on ShipDate (used via <code>USERELATIONSHIP</code>)</li>
           </ul>
         </div>
       </div>
     </div>
 
     <div class="section">
-      <h3>Key KPIs & Metrics</h3>
-      <p>The following KPIs were implemented in DAX to drive the dashboards:</p>
-      <div class="metrics">
-        <div class="metric">
-          <div class="metric-label">Service</div>
-          <div class="metric-value">On-Time Delivery %</div>
-          <p>Shipments delivered on or before promise date, by customer and part.</p>
-        </div>
-        <div class="metric">
-          <div class="metric-label">Profitability</div>
-          <div class="metric-value">Margin &amp; Margin %</div>
-          <p>Revenue vs standard cost by product and customer.</p>
-        </div>
-        <div class="metric">
-          <div class="metric-label">Production</div>
-          <div class="metric-value">Std vs Actual Hours</div>
-          <p>Variance analysis for jobs, parts, and machines.</p>
-        </div>
-        <div class="metric">
-          <div class="metric-label">Quality &amp; OEE</div>
-          <div class="metric-value">Yield &amp; OEE</div>
-          <p>Availability, Performance, Quality metrics at machine level.</p>
-        </div>
-      </div>
+      <h3>Integrations &amp; Automation</h3>
+      <p>
+        A Python-based integration job simulates an Epicor Kinetic–style REST API, calling ERP-like endpoints
+        (customers, parts, sales orders, job orders) and landing the data into the <code>ManufacturingDemo</code>
+        SQL Server database. The job is designed for incremental loads using a <code>modifiedSince</code> parameter and
+        supports truncate-and-reload for dimensions and key-based incremental loads for fact tables.
+      </p>
+      <p>
+        Power BI connects directly to this SQL model, so a single scheduled ETL job keeps all dashboards
+        (OTD, margin, variance, OEE) refreshed automatically—mirroring how a real Epicor integration would feed analytics.
+      </p>
     </div>
 
     <div class="section">
@@ -361,55 +352,74 @@
 
       </div>
     </div>
+	
+	<div class="section">
+	  <h3>Code & Logic</h3>
+	  <p>
+		The full implementation is available in the GitHub repository, including the SQL Server data model and the DAX measures
+		that drive the Power BI dashboards. Below are selected excerpts; follow the links to view the complete scripts.
+	  </p>
+	  
+	  <h4>Python ETL (Excerpt)</h4>
+	  <pre><code>
+	def erp_get(endpoint: str, params: dict = None) -> pd.DataFrame:
+		"""
+		Call ERP REST API and return a DataFrame.
+		"""
+		url = f"{ERP_BASE_URL.rstrip('/')}/{endpoint.lstrip('/')}"
+		headers = {
+			"Authorization": f"Bearer {ERP_API_KEY}",
+			"Accept": "application/json",
+		}
+		logger.info(f"Requesting ERP endpoint: {url}")
+		resp = requests.get(url, headers=headers, params=params, timeout=30)
+	  </code></pre>
+	  <p>
+		<a href="https://github.com/mrcswordfish/Production_Performance_Analytics_System/blob/main/python/erp_to_sql_powerbi.py" target="_blank">
+		  View full Python ETL model on GitHub →
+		</a>
+	  </p>
+
+	  <h4>SQL Server Data Model (Excerpt)</h4>
+	  <pre><code>
+	CREATE TABLE Customers (
+		CustomerID      INT IDENTITY(1,1) PRIMARY KEY,
+		CustomerCode    VARCHAR(10) NOT NULL,
+		CustomerName    VARCHAR(100) NOT NULL,
+		Region          VARCHAR(50)  NULL
+	);
+	  </code></pre>
+	  <p>
+		<a href="https://github.com/mrcswordfish/Production_Performance_Analytics_System/blob/main/SQL/create_tables.sql" target="_blank">
+		  View full SQL data model on GitHub →
+		</a>
+	  </p>
+
+	  <h4>DAX Measures (Excerpt)</h4>
+	  <pre><code>
+	OnTime Delivery % =
+	DIVIDE ( [OnTime Shipments], [Total Shipments] )
+
+	OEE % =
+	[Availability %] * [Performance %] * [Quality %]
+	  </code></pre>
+	  <p>
+		<a href="https://github.com/mrcswordfish/Production_Performance_Analytics_System/blob/main/PowerBI/DAX_Measures_Script.md" target="_blank">
+		  View full DAX KPI library on GitHub →
+		</a>
+	  </p>
+	</div>
 
     <div class="section">
       <h3>Outcome &amp; Value</h3>
       <p>
-        The final solution provides a consolidated analytics layer that can sit on top of an ERP system.
+        The final solution provides a consolidated analytics layer that can sit on top of an ERP system like Epicor, IFS, or SAP.
         It replaces ad-hoc spreadsheets with governed metrics and dashboards, enabling better decisions about
-        delivery reliability, margin management, and shop-floor efficiency.
+        delivery reliability, margin management, and shop-floor efficiency—backed by a realistic integration and data model.
       </p>
     </div>
 	
-	<div class="section">
-  <h3>Code & Logic</h3>
-  <p>
-    The full implementation is available in the GitHub repository, including the SQL Server data model and the DAX measures
-    that drive the Power BI dashboards. Below are selected excerpts; follow the links to view the complete scripts.
-  </p>
-
-  <h4>SQL Server Data Model (Excerpt)</h4>
-  <pre><code>
-CREATE TABLE Customers (
-    CustomerID      INT IDENTITY(1,1) PRIMARY KEY,
-    CustomerCode    VARCHAR(10) NOT NULL,
-    CustomerName    VARCHAR(100) NOT NULL,
-    Region          VARCHAR(50)  NULL
-);
-  </code></pre>
-  <p>
-    <a href="https://github.com/mrcswordfish/Production_Performance_Analytics_System/blob/main/SQL/create_tables.sql" target="_blank">
-      View full SQL data model on GitHub →
-    </a>
-  </p>
-
-  <h4>DAX Measures (Excerpt)</h4>
-  <pre><code>
-OnTime Delivery % =
-DIVIDE ( [OnTime Shipments], [Total Shipments] )
-
-OEE % =
-[Availability %] * [Performance %] * [Quality %]
-  </code></pre>
-  <p>
-    <a href="https://github.com/mrcswordfish/Production_Performance_Analytics_System/blob/main/PowerBI/DAX_Measures_Script.md" target="_blank">
-      View full DAX KPI library on GitHub →
-    </a>
-  </p>
-</div>
-
-
-    <footer>
+	<footer>
       <span>Designed &amp; implemented by <strong>Marc Lomuntad</strong></span>
       <span>Contact: <a href="mailto:marc.lomuntad24@gmail.com">marc.lomuntad24@gmail.com</a></span>
     </footer>
